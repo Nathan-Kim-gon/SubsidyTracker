@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/SubsidyTracker.API/SubsidyTracker.API.csproj" />
+    <Project Path="src/SubsidyTracker.Collector/SubsidyTracker.Collector.csproj" />
+    <Project Path="src/SubsidyTracker.Core/SubsidyTracker.Core.csproj" />
+    <Project Path="src/SubsidyTracker.Data/SubsidyTracker.Data.csproj" />
+  </Folder>
+</Solution>

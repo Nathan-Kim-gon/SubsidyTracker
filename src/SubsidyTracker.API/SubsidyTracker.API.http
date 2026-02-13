@@ -1,0 +1,6 @@
+@SubsidyTracker.API_HostAddress = http://localhost:5173
+
+GET {{SubsidyTracker.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
