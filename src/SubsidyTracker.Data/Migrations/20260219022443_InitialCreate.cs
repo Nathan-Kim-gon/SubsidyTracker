@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,11 +18,11 @@ namespace SubsidyTracker.Data.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Code = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Code = table.Column<string>(maxLength: 20, nullable: false),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,16 +33,16 @@ namespace SubsidyTracker.Data.Migrations
                 name: "CollectionLogs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Source = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    SourceType = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
-                    StartedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CompletedAt = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ItemsCollected = table.Column<int>(type: "INTEGER", nullable: false),
-                    ItemsUpdated = table.Column<int>(type: "INTEGER", nullable: false),
-                    ItemsSkipped = table.Column<int>(type: "INTEGER", nullable: false),
-                    Status = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Source = table.Column<string>(maxLength: 100, nullable: false),
+                    SourceType = table.Column<string>(maxLength: 30, nullable: false),
+                    StartedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CompletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ItemsCollected = table.Column<int>(nullable: false),
+                    ItemsUpdated = table.Column<int>(nullable: false),
+                    ItemsSkipped = table.Column<int>(nullable: false),
+                    Status = table.Column<string>(maxLength: 30, nullable: false),
                     ErrorMessage = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -53,11 +54,11 @@ namespace SubsidyTracker.Data.Migrations
                 name: "Regions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Code = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    ParentId = table.Column<int>(type: "INTEGER", nullable: true)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Code = table.Column<string>(maxLength: 20, nullable: false),
+                    ParentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,10 +75,10 @@ namespace SubsidyTracker.Data.Migrations
                 name: "TargetGroups",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Code = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
+                    Code = table.Column<string>(maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,27 +89,27 @@ namespace SubsidyTracker.Data.Migrations
                 name: "Subsidies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(maxLength: 500, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    Organization = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    Amount = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true),
+                    Organization = table.Column<string>(maxLength: 200, nullable: false),
+                    Amount = table.Column<string>(maxLength: 200, nullable: true),
                     EligibilityCriteria = table.Column<string>(type: "text", nullable: true),
                     ApplicationMethod = table.Column<string>(type: "text", nullable: true),
-                    ApplicationUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    ContactInfo = table.Column<string>(type: "TEXT", maxLength: 300, nullable: true),
-                    SourceUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    ExternalId = table.Column<string>(type: "TEXT", maxLength: 100, nullable: true),
-                    ApplicationStartDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ApplicationEndDate = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Status = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
-                    SourceType = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
-                    ViewCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    RegionId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    ApplicationUrl = table.Column<string>(maxLength: 500, nullable: true),
+                    ContactInfo = table.Column<string>(maxLength: 300, nullable: true),
+                    SourceUrl = table.Column<string>(maxLength: 500, nullable: true),
+                    ExternalId = table.Column<string>(maxLength: 100, nullable: true),
+                    ApplicationStartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ApplicationEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Status = table.Column<string>(maxLength: 20, nullable: false),
+                    SourceType = table.Column<string>(maxLength: 30, nullable: false),
+                    ViewCount = table.Column<int>(nullable: false),
+                    RegionId = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -131,8 +132,8 @@ namespace SubsidyTracker.Data.Migrations
                 name: "SubsidyTargetGroups",
                 columns: table => new
                 {
-                    SubsidyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TargetGroupId = table.Column<int>(type: "INTEGER", nullable: false)
+                    SubsidyId = table.Column<int>(nullable: false),
+                    TargetGroupId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

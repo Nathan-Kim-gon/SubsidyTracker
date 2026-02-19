@@ -43,12 +43,12 @@ export default function SearchFilter({ regions, categories }: Props) {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           placeholder="보조금 검색 (예: 청년, 주거, 출산)"
-          className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-blue-800"
         />
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+          className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600"
         >
           검색
         </button>
@@ -58,7 +58,7 @@ export default function SearchFilter({ regions, categories }: Props) {
         <select
           value={searchParams.get("regionId") || ""}
           onChange={(e) => applyFilters({ regionId: e.target.value || undefined })}
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-auto"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-auto dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
         >
           <option value="">전체 지역</option>
           {regions.map((r) => (
@@ -71,7 +71,7 @@ export default function SearchFilter({ regions, categories }: Props) {
         <select
           value={searchParams.get("categoryId") || ""}
           onChange={(e) => applyFilters({ categoryId: e.target.value || undefined })}
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-auto"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-auto dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
         >
           <option value="">전체 분야</option>
           {[...categories]
@@ -86,7 +86,7 @@ export default function SearchFilter({ regions, categories }: Props) {
         <select
           value={searchParams.get("sortBy") || "CreatedAt"}
           onChange={(e) => applyFilters({ sortBy: e.target.value || undefined })}
-          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-auto"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-auto dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100"
         >
           <option value="CreatedAt">최신순</option>
           <option value="ViewCount">인기순</option>
@@ -102,7 +102,7 @@ export default function SearchFilter({ regions, categories }: Props) {
               setKeyword("");
               startTransition(() => router.push("/"));
             }}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition-colors sm:w-auto"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition-colors sm:w-auto dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             필터 초기화
           </button>

@@ -11,7 +11,7 @@ using SubsidyTracker.Data;
 namespace SubsidyTracker.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260219012409_InitialCreate")]
+    [Migration("20260219022443_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

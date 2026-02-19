@@ -32,11 +32,12 @@ export default async function Home({ searchParams }: Props) {
   return (
     <>
       {/* Hero */}
-      <section className="mb-8 text-center">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">
+      <section className="relative mb-8 text-center">
+        <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-b from-blue-50 to-transparent dark:from-blue-950/30 dark:to-transparent" />
+        <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
           나에게 맞는 정부 보조금 찾기
         </h1>
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-400">
           총 <span className="font-semibold text-blue-600">{subsidies.totalCount.toLocaleString()}</span>건의 보조금 정보
         </p>
       </section>
@@ -48,9 +49,9 @@ export default async function Home({ searchParams }: Props) {
 
       {/* Results */}
       {subsidies.items.length === 0 ? (
-        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center">
-          <p className="text-lg text-gray-500">검색 결과가 없습니다.</p>
-          <p className="mt-1 text-sm text-gray-400">
+        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-800">
+          <p className="text-lg text-gray-500 dark:text-gray-400">검색 결과가 없습니다.</p>
+          <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
             다른 키워드나 필터로 다시 검색해보세요.
           </p>
         </div>

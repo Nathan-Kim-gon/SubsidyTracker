@@ -195,8 +195,12 @@ public class PublicDataCollector : IDataCollector
                             continue;
                         }
 
-                        // 카테고리 매핑
-                        var categoryCode = ResolveCategoryCode(GetStr(item, "서비스분야"));
+                        // 카테고리 매핑 (서비스명이나 지원대상에 "청년"이 있으면 YOUTH 카테고리 우선)
+                        var title = GetStr(item, "서비스명") ?? "";
+                        var target = GetStr(item, "지원대상") ?? "";
+                        var categoryCode = (title.Contains("청년") || target.Contains("청년"))
+                            ? "YOUTH"
+                            : ResolveCategoryCode(GetStr(item, "서비스분야"));
                         var category = await _categoryRepository.GetByCodeAsync(categoryCode)
                                        ?? (await _categoryRepository.GetByCodeAsync("ETC"))!;
 
@@ -228,7 +232,7 @@ public class PublicDataCollector : IDataCollector
                         if (!string.IsNullOrEmpty(deadline) && deadline != "상시" && deadline != "별도공지")
                         {
                             if (DateTime.TryParse(deadline, out var endDate))
-                                subsidy.ApplicationEndDate = endDate;
+                                subsidy.ApplicationEndDate = DateTime.SpecifyKind(endDate, DateTimeKind.Utc);
                         }
 
                         await _subsidyRepository.AddAsync(subsidy);

@@ -38,7 +38,7 @@ export default function Pagination({ page, totalPages }: Props) {
       <button
         onClick={() => goToPage(page - 1)}
         disabled={page <= 1 || isPending}
-        className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm disabled:opacity-30 hover:bg-gray-100 transition-colors"
+        className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm disabled:opacity-30 hover:bg-gray-100 transition-colors dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:disabled:text-gray-600"
       >
         이전
       </button>
@@ -49,11 +49,11 @@ export default function Pagination({ page, totalPages }: Props) {
           <>
             <button
               onClick={() => goToPage(1)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
+              className="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               1
             </button>
-            {start > 2 && <span className="px-1 text-gray-400">...</span>}
+            {start > 2 && <span className="px-1 text-gray-400 dark:text-gray-400">...</span>}
           </>
         )}
 
@@ -65,7 +65,7 @@ export default function Pagination({ page, totalPages }: Props) {
             className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
               p === page
                 ? "border-blue-600 bg-blue-600 text-white"
-                : "border-gray-300 hover:bg-gray-100"
+                : "border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
             }`}
           >
             {p}
@@ -75,11 +75,11 @@ export default function Pagination({ page, totalPages }: Props) {
         {end < totalPages && (
           <>
             {end < totalPages - 1 && (
-              <span className="px-1 text-gray-400">...</span>
+              <span className="px-1 text-gray-400 dark:text-gray-400">...</span>
             )}
             <button
               onClick={() => goToPage(totalPages)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
+              className="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
             >
               {totalPages}
             </button>
@@ -97,7 +97,7 @@ export default function Pagination({ page, totalPages }: Props) {
             className={`rounded-lg border px-3 py-2.5 text-sm transition-colors ${
               p === page
                 ? "border-blue-600 bg-blue-600 text-white"
-                : "border-gray-300 hover:bg-gray-100"
+                : "border-gray-300 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
             }`}
           >
             {p}
@@ -108,7 +108,7 @@ export default function Pagination({ page, totalPages }: Props) {
       <button
         onClick={() => goToPage(page + 1)}
         disabled={page >= totalPages || isPending}
-        className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm disabled:opacity-30 hover:bg-gray-100 transition-colors"
+        className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm disabled:opacity-30 hover:bg-gray-100 transition-colors dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:disabled:text-gray-600"
       >
         다음
       </button>

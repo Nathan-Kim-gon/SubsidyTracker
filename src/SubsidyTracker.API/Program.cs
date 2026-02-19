@@ -2,6 +2,7 @@ using Hangfire;
 using Hangfire.InMemory;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using SubsidyTracker.Collector.Collectors;
 using SubsidyTracker.Collector.Services;
 using SubsidyTracker.Core.Interfaces;
@@ -26,7 +27,8 @@ else
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
         ?? throw new InvalidOperationException("DefaultConnection 연결 문자열이 설정되지 않았습니다.");
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(connectionString));
+        options.UseNpgsql(connectionString)
+               .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
 }
 
 // Repositories
@@ -125,5 +127,13 @@ RecurringJob.AddOrUpdate<CollectionService>(
     "collect-all",
     service => service.RunAllCollectorsAsync(CancellationToken.None),
     Cron.Daily);
+
+// 수동 수집 트리거 엔드포인트
+app.MapPost("/api/admin/collect", () =>
+{
+    BackgroundJob.Enqueue<CollectionService>(
+        service => service.RunAllCollectorsAsync(CancellationToken.None));
+    return Results.Ok(new { message = "수집 작업이 시작되었습니다." });
+});
 
 app.Run();

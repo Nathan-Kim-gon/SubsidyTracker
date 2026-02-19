@@ -65,27 +65,27 @@ export default async function SubsidyDetailPage({ params }: Props) {
       {/* Back button */}
       <Link
         href="/"
-        className="mb-4 inline-flex items-center text-sm text-gray-500 hover:text-blue-600 transition-colors"
+        className="mb-4 inline-flex items-center text-sm text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors"
       >
         &larr; 목록으로 돌아가기
       </Link>
 
       {/* Header */}
-      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6">
+      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
         <div className="mb-3 flex flex-wrap gap-2">
-          <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
+          <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
             {subsidy.categoryName}
           </span>
-          <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-600">
+          <span className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300">
             {subsidy.regionName}
           </span>
-          <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
+          <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700 dark:bg-green-900/50 dark:text-green-300">
             {subsidy.status === "Active" ? "신청 가능" : subsidy.status}
           </span>
         </div>
 
-        <h1 className="mb-2 text-2xl font-bold text-gray-900">{subsidy.title}</h1>
-        <p className="text-gray-500">{subsidy.organization}</p>
+        <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">{subsidy.title}</h1>
+        <p className="text-gray-500 dark:text-gray-400">{subsidy.organization}</p>
       </div>
 
       {/* Content sections */}
@@ -133,7 +133,7 @@ export default async function SubsidyDetailPage({ params }: Props) {
               href={subsidy.applicationUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 transition-colors"
+              className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors"
             >
               신청 바로가기
             </a>
@@ -143,7 +143,7 @@ export default async function SubsidyDetailPage({ params }: Props) {
               href={subsidy.sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+              className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
             >
               상세 정보 보기
             </a>
@@ -156,9 +156,9 @@ export default async function SubsidyDetailPage({ params }: Props) {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6">
-      <h2 className="mb-3 text-lg font-semibold text-gray-900">{title}</h2>
-      <div className="text-sm leading-relaxed text-gray-700">{children}</div>
+    <div className="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+      <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
+      <div className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{children}</div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import Link from "next/link";
 import MobileNav from "@/components/MobileNav";
+import ThemeToggle from "@/components/ThemeToggle";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"] });
@@ -53,31 +54,46 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko">
-      <body className={`${geist.className} bg-gray-50 text-gray-900 antialiased`}>
-        <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
+    <html lang="ko" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}})()`,
+          }}
+        />
+      </head>
+      <body
+        className={`${geist.className} bg-gray-50 text-gray-900 antialiased transition-colors dark:bg-gray-900 dark:text-gray-100`}
+      >
+        <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/80">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-            <Link href="/" className="text-xl font-bold text-blue-600">
+            <Link
+              href="/"
+              className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-xl font-bold text-transparent"
+            >
               보조금 찾기
             </Link>
-            <nav className="hidden gap-6 text-sm font-medium text-gray-600 md:flex">
+            <nav className="hidden gap-6 text-sm font-medium text-gray-600 dark:text-gray-300 md:flex">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="hover:text-blue-600 transition-colors"
+                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
-            <MobileNav links={navLinks} />
+            <div className="flex items-center gap-1">
+              <ThemeToggle />
+              <MobileNav links={navLinks} />
+            </div>
           </div>
         </header>
         <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
-        <footer className="border-t border-gray-200 bg-white py-8 text-center text-sm text-gray-500">
+        <footer className="border-t border-gray-200 bg-white py-8 text-center text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400">
           <p>&copy; 2026 보조금 찾기. 공공데이터포털 기반.</p>
-          <p className="mx-auto mt-2 max-w-md text-xs text-gray-400">
+          <p className="mx-auto mt-2 max-w-md text-xs text-gray-400 dark:text-gray-500">
             본 서비스는 공공데이터를 기반으로 정보를 제공하며, 정보의 정확성·완전성을
             보장하지 않습니다. 실제 보조금 신청 시 해당 기관에 직접 확인하시기
             바랍니다.

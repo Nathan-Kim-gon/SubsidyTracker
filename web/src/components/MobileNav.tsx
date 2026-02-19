@@ -15,7 +15,7 @@ export default function MobileNav({ links }: Props) {
       <button
         onClick={() => setOpen(!open)}
         aria-label="메뉴 열기"
-        className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+        className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors dark:text-gray-300 dark:hover:bg-gray-700"
       >
         {open ? (
           <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -29,14 +29,14 @@ export default function MobileNav({ links }: Props) {
       </button>
 
       {open && (
-        <nav className="absolute left-0 top-16 z-50 w-full border-b border-gray-200 bg-white shadow-lg">
+        <nav className="absolute left-0 top-16 z-50 w-full border-b border-gray-200 bg-white shadow-lg dark:bg-gray-800 dark:border-gray-700 dark:shadow-gray-900">
           <div className="mx-auto flex max-w-6xl flex-col px-4 py-2">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="border-b border-gray-100 py-3 text-sm font-medium text-gray-700 last:border-0 hover:text-blue-600 transition-colors"
+                className="border-b border-gray-100 py-3 text-sm font-medium text-gray-700 last:border-0 hover:text-blue-600 transition-colors dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 {link.label}
               </Link>
