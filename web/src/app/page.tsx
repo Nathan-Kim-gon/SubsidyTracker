@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Metadata } from "next";
 import { getCategories, getRegions, getSubsidies } from "@/lib/api";
 import SearchFilter from "@/components/SearchFilter";
 import SubsidyCard from "@/components/SubsidyCard";
@@ -12,6 +13,55 @@ interface Props {
     sortBy?: string;
     page?: string;
   }>;
+}
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://bojogeum.co.kr";
+
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const parts: string[] = [];
+
+  if (params.keyword) parts.push(`"${params.keyword}"`);
+
+  if (params.categoryId) {
+    try {
+      const categories = await getCategories();
+      const cat = categories.find((c) => c.id === Number(params.categoryId));
+      if (cat) parts.push(cat.name);
+    } catch {}
+  }
+
+  if (params.regionId) {
+    try {
+      const regions = await getRegions();
+      const findRegion = (list: typeof regions): string | null => {
+        for (const r of list) {
+          if (r.id === Number(params.regionId)) return r.name;
+          const child = findRegion(r.children);
+          if (child) return child;
+        }
+        return null;
+      };
+      const name = findRegion(regions);
+      if (name) parts.push(name);
+    } catch {}
+  }
+
+  if (parts.length === 0) return {};
+
+  const label = parts.join(" ");
+  const title = `${label} 보조금 - 보조금 찾기`;
+  const description = `${label} 관련 정부 보조금·지원금을 한눈에 검색하세요. 지역별, 분야별 맞춤 보조금 정보를 제공합니다.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: SITE_URL,
+    },
+  };
 }
 
 export default async function Home({ searchParams }: Props) {
@@ -29,13 +79,36 @@ export default async function Home({ searchParams }: Props) {
     getCategories(),
   ]);
 
+  // 동적 히어로 제목
+  const headingParts: string[] = [];
+  if (params.keyword) headingParts.push(`"${params.keyword}"`);
+  if (params.categoryId) {
+    const cat = categories.find((c) => c.id === Number(params.categoryId));
+    if (cat) headingParts.push(cat.name);
+  }
+  if (params.regionId) {
+    const findRegion = (list: typeof regions): string | null => {
+      for (const r of list) {
+        if (r.id === Number(params.regionId)) return r.name;
+        const child = findRegion(r.children);
+        if (child) return child;
+      }
+      return null;
+    };
+    const name = findRegion(regions);
+    if (name) headingParts.push(name);
+  }
+  const heading = headingParts.length > 0
+    ? `${headingParts.join(" ")} 보조금`
+    : "나에게 맞는 정부 보조금 찾기";
+
   return (
     <>
       {/* Hero */}
       <section className="relative mb-8 text-center">
         <div className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-b from-blue-50 to-transparent dark:from-blue-950/30 dark:to-transparent" />
         <h1 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
-          나에게 맞는 정부 보조금 찾기
+          {heading}
         </h1>
         <p className="text-gray-500 dark:text-gray-400">
           총 <span className="font-semibold text-blue-600">{subsidies.totalCount.toLocaleString()}</span>건의 보조금 정보
