@@ -34,6 +34,7 @@ public class SubsidyRepository : ISubsidyRepository
         {
             "title" => filter.SortDescending ? query.OrderByDescending(s => s.Title) : query.OrderBy(s => s.Title),
             "applicationenddate" => filter.SortDescending ? query.OrderByDescending(s => s.ApplicationEndDate) : query.OrderBy(s => s.ApplicationEndDate),
+            "viewcount" => filter.SortDescending ? query.OrderByDescending(s => s.ViewCount) : query.OrderBy(s => s.ViewCount),
             _ => filter.SortDescending ? query.OrderByDescending(s => s.CreatedAt) : query.OrderBy(s => s.CreatedAt)
         };
 
@@ -67,6 +68,24 @@ public class SubsidyRepository : ISubsidyRepository
         return await _context.Subsidies.AnyAsync(s => s.ExternalId == externalId);
     }
 
+    public async Task<int> CloseMissingAsync(SourceType sourceType, IEnumerable<string> activeExternalIds)
+    {
+        var activeSet = activeExternalIds.ToHashSet();
+        var toClose = await _context.Subsidies
+            .Where(s => s.SourceType == sourceType && s.Status == SubsidyStatus.Active)
+            .Where(s => s.ExternalId != null && !activeSet.Contains(s.ExternalId))
+            .ToListAsync();
+
+        foreach (var subsidy in toClose)
+        {
+            subsidy.Status = SubsidyStatus.Closed;
+            subsidy.UpdatedAt = DateTime.UtcNow;
+        }
+
+        await _context.SaveChangesAsync();
+        return toClose.Count;
+    }
+
     private IQueryable<Subsidy> BuildQuery(SubsidyFilter filter)
     {
         var query = _context.Subsidies
@@ -96,6 +115,10 @@ public class SubsidyRepository : ISubsidyRepository
 
         if (filter.Status.HasValue)
             query = query.Where(s => s.Status == filter.Status.Value);
+
+        // 신청기한이 지난 항목 제외 (Active 필터 시)
+        if (filter.Status == SubsidyStatus.Active)
+            query = query.Where(s => s.ApplicationEndDate == null || s.ApplicationEndDate > DateTime.UtcNow);
 
         return query;
     }

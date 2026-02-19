@@ -11,6 +11,7 @@ public interface ISubsidyRepository
     Task<Subsidy> AddAsync(Subsidy subsidy);
     Task UpdateAsync(Subsidy subsidy);
     Task<bool> ExistsAsync(string externalId);
+    Task<int> CloseMissingAsync(SourceType sourceType, IEnumerable<string> activeExternalIds);
 }
 
 public class SubsidyFilter

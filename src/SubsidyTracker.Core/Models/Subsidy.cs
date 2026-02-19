@@ -18,6 +18,7 @@ public class Subsidy
     public DateTime? ApplicationEndDate { get; set; }           // 신청마감일
     public SubsidyStatus Status { get; set; } = SubsidyStatus.Active;
     public SourceType SourceType { get; set; }                  // API or Crawling
+    public int ViewCount { get; set; }                            // 조회수 (공공데이터포털 제공)
 
     public int RegionId { get; set; }
     public Region Region { get; set; } = null!;

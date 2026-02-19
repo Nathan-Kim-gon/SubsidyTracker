@@ -128,6 +128,7 @@ public class PublicDataCollector : IDataCollector
             var page = 1;
             var pageSize = 100;
             var hasMore = true;
+            var seenExternalIds = new List<string>();
 
             while (hasMore && !cancellationToken.IsCancellationRequested)
             {
@@ -173,6 +174,8 @@ public class PublicDataCollector : IDataCollector
                             continue;
                         }
 
+                        seenExternalIds.Add(externalId);
+
                         // 중복 체크
                         var existing = await _subsidyRepository.GetByExternalIdAsync(externalId);
                         if (existing != null)
@@ -216,7 +219,8 @@ public class PublicDataCollector : IDataCollector
                             SourceType = SourceType.PublicDataPortal,
                             Status = SubsidyStatus.Active,
                             RegionId = region.Id,
-                            CategoryId = category.Id
+                            CategoryId = category.Id,
+                            ViewCount = GetInt(item, "조회수")
                         };
 
                         // 신청기한 파싱
@@ -247,6 +251,15 @@ public class PublicDataCollector : IDataCollector
                 await Task.Delay(300, cancellationToken);
             }
 
+            // API에서 사라진 항목을 Closed 처리
+            var closed = 0;
+            if (seenExternalIds.Count > 0)
+            {
+                closed = await _subsidyRepository.CloseMissingAsync(SourceType.PublicDataPortal, seenExternalIds);
+                if (closed > 0)
+                    _logger.LogInformation("만료 처리: {Closed}건의 보조금이 Closed로 변경됨", closed);
+            }
+
             log.ItemsCollected = collected;
             log.ItemsUpdated = updated;
             log.ItemsSkipped = skipped;
@@ -254,8 +267,8 @@ public class PublicDataCollector : IDataCollector
             log.CompletedAt = DateTime.UtcNow;
             await _logRepository.UpdateAsync(log);
 
-            _logger.LogInformation("공공데이터포털 수집 완료: {Collected}건 수집, {Updated}건 업데이트, {Skipped}건 건너뜀",
-                collected, updated, skipped);
+            _logger.LogInformation("공공데이터포털 수집 완료: {Collected}건 수집, {Updated}건 업데이트, {Skipped}건 건너뜀, {Closed}건 만료",
+                collected, updated, skipped, closed);
 
             return collected;
         }
@@ -279,6 +292,7 @@ public class PublicDataCollector : IDataCollector
         subsidy.EligibilityCriteria = BuildEligibility(item) ?? subsidy.EligibilityCriteria;
         subsidy.ApplicationMethod = GetStr(item, "신청방법") ?? subsidy.ApplicationMethod;
         subsidy.ContactInfo = GetStr(item, "전화문의") ?? subsidy.ContactInfo;
+        subsidy.ViewCount = GetInt(item, "조회수");
     }
 
     private static string? BuildEligibility(JsonElement item)
@@ -325,6 +339,13 @@ public class PublicDataCollector : IDataCollector
         }
 
         return (await _regionRepository.GetByCodeAsync("ALL"))!;
+    }
+
+    private static int GetInt(JsonElement element, string propertyName)
+    {
+        if (element.TryGetProperty(propertyName, out var prop) && prop.ValueKind == JsonValueKind.Number)
+            return prop.GetInt32();
+        return 0;
     }
 
     private static string? GetStr(JsonElement element, string propertyName)

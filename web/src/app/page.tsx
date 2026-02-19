@@ -9,6 +9,7 @@ interface Props {
     keyword?: string;
     regionId?: string;
     categoryId?: string;
+    sortBy?: string;
     page?: string;
   }>;
 }
@@ -20,6 +21,7 @@ export default async function Home({ searchParams }: Props) {
       keyword: params.keyword,
       regionId: params.regionId ? Number(params.regionId) : undefined,
       categoryId: params.categoryId ? Number(params.categoryId) : undefined,
+      sortBy: params.sortBy,
       page: params.page ? Number(params.page) : 1,
       pageSize: 20,
     }),

@@ -36,7 +36,7 @@ public class SubsidiesController : ControllerBase
             RegionId = regionId,
             CategoryId = categoryId,
             TargetGroupId = targetGroupId,
-            Status = status,
+            Status = status ?? SubsidyStatus.Active,
             SortBy = sortBy,
             SortDescending = sortDescending
         };

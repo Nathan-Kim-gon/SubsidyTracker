@@ -37,6 +37,7 @@ public class AppDbContext : DbContext
             entity.HasIndex(e => e.RegionId);
             entity.HasIndex(e => e.CategoryId);
             entity.HasIndex(e => e.CreatedAt);
+            entity.HasIndex(e => e.ViewCount);
             entity.HasOne(e => e.Region).WithMany(r => r.Subsidies).HasForeignKey(e => e.RegionId);
             entity.HasOne(e => e.Category).WithMany(c => c.Subsidies).HasForeignKey(e => e.CategoryId);
         });
@@ -124,7 +125,8 @@ public class AppDbContext : DbContext
             new Category { Id = 6, Name = "행정·안전", Code = "ADMIN", Description = "행정 및 안전 지원" },
             new Category { Id = 7, Name = "문화·환경", Code = "CULTURE", Description = "문화 및 환경 지원" },
             new Category { Id = 8, Name = "농림·축산", Code = "AGRICULTURE", Description = "농림 및 축산 지원" },
-            new Category { Id = 9, Name = "기타", Code = "ETC", Description = "기타 지원" }
+            new Category { Id = 9, Name = "기타", Code = "ETC", Description = "기타 지원" },
+            new Category { Id = 10, Name = "청년", Code = "YOUTH", Description = "청년 정책 및 지원" }
         );
 
         // Seed TargetGroups

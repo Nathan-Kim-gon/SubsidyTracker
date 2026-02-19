@@ -48,6 +48,7 @@ export interface SubsidyFilter {
   keyword?: string;
   regionId?: number;
   categoryId?: number;
+  sortBy?: string;
   page?: number;
   pageSize?: number;
 }

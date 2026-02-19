@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
+WORKDIR /src
+
+# Copy project files and restore
+COPY src/SubsidyTracker.Core/SubsidyTracker.Core.csproj SubsidyTracker.Core/
+COPY src/SubsidyTracker.Data/SubsidyTracker.Data.csproj SubsidyTracker.Data/
+COPY src/SubsidyTracker.Collector/SubsidyTracker.Collector.csproj SubsidyTracker.Collector/
+COPY src/SubsidyTracker.API/SubsidyTracker.API.csproj SubsidyTracker.API/
+RUN dotnet restore SubsidyTracker.API/SubsidyTracker.API.csproj
+
+# Copy source and publish
+COPY src/ .
+RUN dotnet publish SubsidyTracker.API/SubsidyTracker.API.csproj -c Release -o /app --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview
+WORKDIR /app
+COPY --from=build /app .
+
+ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+EXPOSE 5000
+ENTRYPOINT ["dotnet", "SubsidyTracker.API.dll"]

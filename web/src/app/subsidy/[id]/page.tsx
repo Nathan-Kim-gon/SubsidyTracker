@@ -7,13 +7,27 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://bojogeum.co.kr";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   try {
     const subsidy = await getSubsidy(Number(id));
+    const description =
+      subsidy.description?.slice(0, 160) ||
+      `${subsidy.organization} - ${subsidy.title}`;
     return {
-      title: `${subsidy.title} - 보조금 찾기`,
-      description: subsidy.description?.slice(0, 160) || subsidy.title,
+      title: subsidy.title,
+      description,
+      openGraph: {
+        title: `${subsidy.title} - 보조금 찾기`,
+        description,
+        url: `${SITE_URL}/subsidy/${id}`,
+        type: "article",
+      },
+      alternates: {
+        canonical: `${SITE_URL}/subsidy/${id}`,
+      },
     };
   } catch {
     return { title: "보조금 찾기" };
@@ -29,8 +43,25 @@ export default async function SubsidyDetailPage({ params }: Props) {
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "GovernmentService",
+    name: subsidy.title,
+    description: subsidy.description,
+    provider: {
+      "@type": "GovernmentOrganization",
+      name: subsidy.organization,
+    },
+    areaServed: subsidy.regionName,
+    category: subsidy.categoryName,
+  };
+
   return (
     <article className="mx-auto max-w-3xl">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Back button */}
       <Link
         href="/"

@@ -42,6 +42,10 @@ appsettings.*.local.json
 *.swp
 *~
 
+## Deployment
+.env
+DEPLOY.md
+
 ## OS
 .DS_Store
 Thumbs.db

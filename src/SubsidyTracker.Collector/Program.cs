@@ -35,12 +35,10 @@ builder.Services.AddScoped<ICollectionLogRepository, CollectionLogRepository>();
 
 // HttpClient
 builder.Services.AddHttpClient<PublicDataCollector>();
-builder.Services.AddHttpClient<BokjiroCrawler>();
 builder.Services.AddHttpClient<YouthCenterCollector>();
 
 // Collectors
 builder.Services.AddScoped<IDataCollector, PublicDataCollector>();
-builder.Services.AddScoped<IDataCollector, BokjiroCrawler>();
 builder.Services.AddScoped<IDataCollector, YouthCenterCollector>();
 
 // Collection Service

@@ -37,7 +37,7 @@ export default function SearchFilter({ regions, categories }: Props) {
 
   return (
     <div className="mb-6 space-y-4">
-      <form onSubmit={handleSearch} className="flex gap-2">
+      <form onSubmit={handleSearch} className="flex flex-col gap-2 sm:flex-row">
         <input
           type="text"
           value={keyword}
@@ -54,11 +54,11 @@ export default function SearchFilter({ regions, categories }: Props) {
         </button>
       </form>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <select
           value={searchParams.get("regionId") || ""}
           onChange={(e) => applyFilters({ regionId: e.target.value || undefined })}
-          className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-auto"
         >
           <option value="">전체 지역</option>
           {regions.map((r) => (
@@ -71,25 +71,38 @@ export default function SearchFilter({ regions, categories }: Props) {
         <select
           value={searchParams.get("categoryId") || ""}
           onChange={(e) => applyFilters({ categoryId: e.target.value || undefined })}
-          className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-auto"
         >
           <option value="">전체 분야</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
+          {[...categories]
+            .sort((a, b) => (a.code === "ETC" ? 1 : b.code === "ETC" ? -1 : 0))
+            .map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+        </select>
+
+        <select
+          value={searchParams.get("sortBy") || "CreatedAt"}
+          onChange={(e) => applyFilters({ sortBy: e.target.value || undefined })}
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none sm:w-auto"
+        >
+          <option value="CreatedAt">최신순</option>
+          <option value="ViewCount">인기순</option>
+          <option value="ApplicationEndDate">마감임박순</option>
         </select>
 
         {(searchParams.get("keyword") ||
           searchParams.get("regionId") ||
-          searchParams.get("categoryId")) && (
+          searchParams.get("categoryId") ||
+          searchParams.get("sortBy")) && (
           <button
             onClick={() => {
               setKeyword("");
               startTransition(() => router.push("/"));
             }}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition-colors"
+            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-500 hover:bg-gray-100 transition-colors sm:w-auto"
           >
             필터 초기화
           </button>
