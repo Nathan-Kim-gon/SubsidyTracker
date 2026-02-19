@@ -87,8 +87,19 @@ export default function Pagination({ page, totalPages }: Props) {
         )}
       </div>
 
-      {/* 모바일 페이지네이션 (간소화) */}
+      {/* 모바일 페이지네이션 */}
       <div className="flex items-center gap-1 sm:hidden">
+        {mobileStart > 1 && (
+          <>
+            <button
+              onClick={() => goToPage(1)}
+              className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+            >
+              1
+            </button>
+            {mobileStart > 2 && <span className="px-1 text-gray-400">...</span>}
+          </>
+        )}
         {mobilePages.map((p) => (
           <button
             key={p}
@@ -103,6 +114,17 @@ export default function Pagination({ page, totalPages }: Props) {
             {p}
           </button>
         ))}
+        {mobileEnd < totalPages && (
+          <>
+            {mobileEnd < totalPages - 1 && <span className="px-1 text-gray-400">...</span>}
+            <button
+              onClick={() => goToPage(totalPages)}
+              className="rounded-lg border border-gray-300 px-3 py-2.5 text-sm hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+            >
+              {totalPages}
+            </button>
+          </>
+        )}
       </div>
 
       <button
