@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import Link from "next/link";
 import MobileNav from "@/components/MobileNav";
 import ThemeToggle from "@/components/ThemeToggle";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"] });
@@ -56,12 +57,14 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
+        <meta name="naver-site-verification" content="09901c6189797bac8b8349e85a4951a46e185aa9" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}})()`,
           }}
         />
       </head>
+      <GoogleAnalytics />
       <body
         className={`${geist.className} bg-gray-50 text-gray-900 antialiased transition-colors dark:bg-gray-900 dark:text-gray-100`}
       >
@@ -98,6 +101,15 @@ export default function RootLayout({
             보장하지 않습니다. 실제 보조금 신청 시 해당 기관에 직접 확인하시기
             바랍니다.
           </p>
+          <div className="mt-4 flex justify-center gap-4 text-xs text-gray-400 dark:text-gray-500">
+            <Link href="/privacy" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+              개인정보처리방침
+            </Link>
+            <span>|</span>
+            <Link href="/terms" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+              이용약관
+            </Link>
+          </div>
         </footer>
       </body>
     </html>
